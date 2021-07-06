@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import ItemCount from './ItemCount.js';
 import ItemList from './ItemList.js';
 import Logo from '../images/logo.png';
+import ItemDetailContainer from './ItemDetailContainer.js'
 
 const productsInfo = [{
   id: 101,
@@ -32,6 +33,8 @@ function ItemListContainer ({mensaje}){
       <h1> {mensaje} </h1>
       <ItemCount stock={5} initial={1} />
       <ItemList productos = {productsData}/>
+      <h1>próximo desafio </h1>
+      <ItemDetailContainer productId = {5}/>
     </div>
   )
 }
