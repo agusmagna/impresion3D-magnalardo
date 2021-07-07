@@ -1,18 +1,23 @@
 import React, {useState , useEffect}from 'react';
 import ItemDetail from './ItemDetail.js'
-
+import {useParams} from 'react-router-dom'
 
 const getItems =
   new Promise ((resolve, reject)=> {
-      setTimeout(resolve(fetch('https://mocki.io/v1/92b80592-83fd-4932-8667-f7c4e2cb9335')), 2000)
+      setTimeout(resolve(fetch('https://mocki.io/v1/2bc1c9c2-747e-4843-af10-14075cdfcab8')), 2000)
       reject('error')
     })
 
-function ItemDetailContainer ({productId}) {
+function ItemDetailContainer () {
   const [product, setProduct] = useState([])
+  const productId = useParams();
+
+  const getItem = () => {
+    getItems.then(res => res.clone().json()).then((data) => setProduct(data.find(element => element.id === productId.itemid)))
+  }
 
   useEffect(()=>{
-    getItems.then(res => res.json()).then((data) => setProduct(data.find(element => element.id === productId)))
+    getItem();
       },[])
 
 

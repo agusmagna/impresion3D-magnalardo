@@ -1,40 +1,33 @@
+// React
 import React, {useState, useEffect} from 'react';
-import ItemCount from './ItemCount.js';
+// Components
 import ItemList from './ItemList.js';
-import Logo from '../images/logo.png';
-import ItemDetailContainer from './ItemDetailContainer.js'
+// React-router-dom
+import {useParams} from 'react-router-dom'
 
-const productsInfo = [{
-  id: 101,
-  title: 'Producto X',
-  description: 'es una descripción',
-  price: 1000,
-  pictureUrl: Logo,
-},{
-  id: 102,
-  title: 'Producto Y',
-  description: 'es una descripción',
-  price: 1500,
-  pictureUrl: Logo,
-}];
-
-
-function ItemListContainer ({mensaje}){
+function ItemListContainer(){
   const[productsData, setProductsData] = useState ([]);
+  const categoryId = useParams()
 
-  useEffect(()=> {
-    new Promise ((resolve, reject)=> {
-      setTimeout(resolve(productsInfo), 2000)
-      reject('error')
-    }).then(resolve=>setProductsData(resolve)).catch(error=>console.log('error',error))
+  const getAllItems =
+  new Promise ((resolve, reject)=> {
+    setTimeout(resolve(fetch('https://mocki.io/v1/2bc1c9c2-747e-4843-af10-14075cdfcab8')), 2000)
+    reject('error')
   })
+
+  const products = () => {
+    if(categoryId.categoryid){
+      getAllItems.then(res => res.json()).then((data) => setProductsData(data.filter(element=>element.category=== categoryId.categoryid)))
+  } else (
+    getAllItems.then(res => res.json()).then((data) => setProductsData(data))
+  )}
+  useEffect(()=>{
+    products()
+  },[categoryId])
+
   return(
-    <div>
-      <h1> {mensaje} </h1>
-      <ItemCount stock={5} initial={1} />
+    <div style={{ marginTop:'10px'}}>
       <ItemList productos = {productsData}/>
-      <h1>próximo desafio </h1>
-      <ItemDetailContainer productId = {5}/>
     </div>
   )
 }
