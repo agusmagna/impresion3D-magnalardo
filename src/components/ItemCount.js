@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import { Alert } from 'antd';
 
 
-function ItemCount ({stock, onAdd, initial}) {
+function ItemCount ({stock, onAdd, initial, isHidden}) {
    const [count, setCount] = useState(initial);
    const [error, setError] = useState('');
 
@@ -19,7 +19,6 @@ function ItemCount ({stock, onAdd, initial}) {
         setError(<Alert message="No se pueden agregar más productos" type="error"/>)
       }
    }
-   console.log('error',error)
    const subtractCount = () => {
       if (count > 1) {
         setCount(count-1)
@@ -30,7 +29,7 @@ function ItemCount ({stock, onAdd, initial}) {
    }
 
    return(
-     <div>
+     <div hidden={isHidden}>
        <Card style={{ width: 300, margin:'auto'}}>
         <div style={{marginBottom:'5px'}}>
            <Button onClick={subtractCount} style={{marginRight:'7px'}}>-</Button>
@@ -38,7 +37,8 @@ function ItemCount ({stock, onAdd, initial}) {
            <Button onClick={addCount} style={{marginLeft:'7px'}}>+</Button><br/>
         </div>
          <span>{error}</span>
-         <Button type='primary' onClick={onAdd} style={{marginTop:'10px'}}> Agregar al carrito</Button>
+         <Button type='primary' onClick={(event)=> {
+           if (onAdd) return onAdd({count})}} style={{marginTop:'10px'}}> Agregar al carrito</Button>
        </Card>
      </div>
    )

@@ -3,6 +3,7 @@ import './App.css';
 import NavBar from './components/NavBar.js'
 import ItemListContainer from './components/ItemListContainer.js'
 import ItemDetailContainer from './components/ItemDetailContainer.js'
+import Cart from './components/Cart.js'
 // react-router-dom
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 // Estilo
@@ -23,6 +24,9 @@ function App() {
           </Route>
           <Route exact path="/item/:itemid">
             <ItemDetailContainer/>
+          </Route>
+          <Route exact path="/cart">
+            <Cart/>
           </Route>
         </Switch>
       </BrowserRouter>

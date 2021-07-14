@@ -22,7 +22,6 @@ function ItemDetailContainer () {
 
 
 
-console.log('product', product)
  return (
    <ItemDetail item = {product}/>
 
