@@ -4,10 +4,13 @@ import React, {useState, useEffect} from 'react';
 import ItemList from './ItemList.js';
 // React-router-dom
 import {useParams} from 'react-router-dom'
+// Estilo
+import { Spin } from 'antd';
 
 function ItemListContainer(){
   const[productsData, setProductsData] = useState ([]);
   const categoryId = useParams()
+  const [loading, setLoading] = useState(false)
 
   const getAllItems =
   new Promise ((resolve, reject)=> {
@@ -22,8 +25,16 @@ function ItemListContainer(){
     getAllItems.then(res => res.json()).then((data) => setProductsData(data))
   )}
   useEffect(()=>{
+    setLoading(true);
+    setTimeout(()=>setLoading(false),2000)
     products()
   },[categoryId])
+
+  if(loading){
+    return <><div style={{ marginTop:'50px'}}><Spin/></div>
+    <div><h2>Cargando...</h2></div></>
+  }
+
 
   return(
     <div style={{ marginTop:'10px'}}>

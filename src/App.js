@@ -1,4 +1,5 @@
 import './App.css';
+import {useState} from 'react'
 // Components
 import NavBar from './components/NavBar.js'
 import ItemListContainer from './components/ItemListContainer.js'
@@ -8,11 +9,15 @@ import Cart from './components/Cart.js'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 // Estilo
 import 'antd/dist/antd.css';
+// Contextos
+import {CartContext} from './components/CartContext.js'
 
 
 function App() {
+  const [cartComponents, setCartComponents] = useState([])
   return (
     <div className="App">
+    <CartContext.Provider value = {{cartComponents, setCartComponents}}>
       <BrowserRouter>
         <NavBar />
         <Switch>
@@ -30,7 +35,7 @@ function App() {
           </Route>
         </Switch>
       </BrowserRouter>
-
+    </CartContext.Provider>
     </div>
   );
 }

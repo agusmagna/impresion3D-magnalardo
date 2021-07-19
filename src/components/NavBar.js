@@ -9,9 +9,6 @@ import {Link} from 'react-router-dom'
 
 
 const { SubMenu } = Menu;
-const deco = "deco";
-const organizadores = "organizadores";
-const repuestos = "repuestos"
 const categories = [
   {categoryName:'Decoración',
   categoryId:'deco'},
@@ -32,7 +29,7 @@ function NavBar() {
         <Menu.Item key={category.categoryId}> <Link to={`/category/${category.categoryId}`}>{category.categoryName}</Link></Menu.Item>
       )}
       </SubMenu>
-      <Menu.Item key="CartWidget"> <CartWidget/> </Menu.Item>
+      <Menu.Item key="CartWidget"> <Link to={`/cart`}><CartWidget/> </Link></Menu.Item>
     </Menu>
   </div>
 )
