@@ -16,6 +16,8 @@ function ItemDetail({item}){
   const [isHidden, setIsHidden] = useState(false)
   const cartContext = useContext(CartContext)
 
+  console.log(cartContext.cartComponents)
+
   const isInCart = cartContext.cartComponents.find(element => element.item.id === item.id)
 
 
@@ -24,8 +26,12 @@ function ItemDetail({item}){
     if (!isInCart) {
       if (cartContext.cartComponents.length) {
         cartContext.setCartComponents([...cartContext.cartComponents,{'item':item,'quantity':quantityToAdd}])
+        cartContext.setTotalItems(cartContext.totalItems + quantityToAdd)
+        cartContext.setTotalPrice(cartContext.totalPrice + (item.price * quantityToAdd))
       }else{
         cartContext.setCartComponents([{'item':item,'quantity':quantityToAdd}])
+        cartContext.setTotalItems(cartContext.totalItems + quantityToAdd)
+        cartContext.setTotalPrice(cartContext.totalPrice + (item.price * quantityToAdd))
       }
       setIsHidden(true);
     } else (
