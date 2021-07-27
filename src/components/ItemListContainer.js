@@ -6,29 +6,55 @@ import ItemList from './ItemList.js';
 import {useParams} from 'react-router-dom'
 // Estilo
 import { Spin } from 'antd';
+// firebase
+import {getFirestore} from '../firebase'
 
 function ItemListContainer(){
   const[productsData, setProductsData] = useState ([]);
   const categoryId = useParams()
   const [loading, setLoading] = useState(false)
 
-  const getAllItems =
-  new Promise ((resolve, reject)=> {
-    setTimeout(resolve(fetch('https://mocki.io/v1/2bc1c9c2-747e-4843-af10-14075cdfcab8')), 2000)
-    reject('error')
-  })
+  console.log(categoryId.categoryid)
+  const getProducts = () => {
+    if (categoryId.categoryid) {
+      setLoading(true)
+      const db = getFirestore();
+      const productsCollection = db.collection("productos");
+      productsCollection.where('category', '==', categoryId.categoryid).get().then((querySnapshot) => {
+        if(querySnapshot.size === 0){
+          console.log('no results')
+        } else{
+          setProductsData(querySnapshot.docs.map(doc=>doc.data()))
+        }
+      }).catch(error=>{
+        console.log('error',error)
+      }).finally(()=>{
+        setLoading(false)
+      })
+    } else {
+      setLoading(true)
+      const db = getFirestore();
+      const productsCollection = db.collection("productos");
+      productsCollection.get().then((querySnapshot) => {
+        if(querySnapshot.size === 0){
+          console.log('no results')
+        } else{
+          setProductsData(querySnapshot.docs.map(doc=>doc.data()))
+        }
+      }).catch(error=>{
+        console.log('error',error)
+      }).finally(()=>{
+        setLoading(false)
+      })
+    }
+  }
 
-  const products = () => {
-    if(categoryId.categoryid){
-      getAllItems.then(res => res.json()).then((data) => setProductsData(data.filter(element=>element.category=== categoryId.categoryid)))
-  } else (
-    getAllItems.then(res => res.json()).then((data) => setProductsData(data))
-  )}
   useEffect(()=>{
-    setLoading(true);
-    setTimeout(()=>setLoading(false),2000)
-    products()
+    getProducts()
   },[categoryId])
+
+  console.log(productsData)
+
 
   if(loading){
     return <><div style={{ marginTop:'50px'}}><Spin/></div>

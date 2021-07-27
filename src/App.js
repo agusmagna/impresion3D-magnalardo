@@ -1,5 +1,4 @@
 import './App.css';
-import {useState} from 'react'
 // Components
 import NavBar from './components/NavBar.js'
 import ItemListContainer from './components/ItemListContainer.js'

@@ -20,8 +20,6 @@ function CartWidget() {
     setHidden()
   },[cartContext.cartComponents])
 
-  console.log(isWidgetHidden)
-  console.log(cartContext.cartComponents.length )
   return(
     <div hidden={isWidgetHidden}>
     <FontAwesomeIcon icon={faShoppingCart} style={{fontSize:'18px'}} />

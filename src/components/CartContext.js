@@ -7,6 +7,7 @@ export const CartContextProvider = ({children}) => {
   const [totalItems, setTotalItems] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
 
+
   const clear = () =>{
     setCartComponents([])
     setTotalItems(0)

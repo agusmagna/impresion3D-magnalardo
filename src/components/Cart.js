@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react'
+import React, {useContext} from 'react'
 // Estilo
 import {Card, Row, Col, Button} from 'antd'
 // Contexto

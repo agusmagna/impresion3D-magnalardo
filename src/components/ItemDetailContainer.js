@@ -1,26 +1,40 @@
 import React, {useState , useEffect}from 'react';
 import ItemDetail from './ItemDetail.js'
 import {useParams} from 'react-router-dom'
+// firebase
+import {getFirestore} from '../firebase'
 
-const getItems =
-  new Promise ((resolve, reject)=> {
-      setTimeout(resolve(fetch('https://mocki.io/v1/2bc1c9c2-747e-4843-af10-14075cdfcab8')), 2000)
-      reject('error')
-    })
+
 
 function ItemDetailContainer () {
   const [product, setProduct] = useState([])
   const productId = useParams();
 
+console.log(productId.itemid)
   const getItem = () => {
-    getItems.then(res => res.clone().json()).then((data) => setProduct(data.find(element => element.id === productId.itemid)))
-  }
+        const db = getFirestore();
+        const productsCollection = db.collection('productos');
+        productsCollection.where('id','==', productId.itemid).get().then((querySnapshot) => {
+          if(querySnapshot.size === 0){
+            console.log('no results')
+          } else{
+            setProduct(querySnapshot.docs.map(doc=>doc.data())[0])
+          }
+        }).catch(error=>{
+          console.log('error',error)
+        })
+    }
+  // const getItem = () => {
+  //
+  //   getItems.then(res => res.clone().json()).then((data) => setProduct(data.find(element => element.id === productId.itemid)))
+  // }
 
-  useEffect(()=>{
-    getItem();
-      },[])
 
+    useEffect(()=>{
+      getItem();
+        },[])
 
+  console.log('producto', product)
 
  return (
    <ItemDetail item = {product}/>

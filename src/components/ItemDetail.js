@@ -16,8 +16,6 @@ function ItemDetail({item}){
   const [isHidden, setIsHidden] = useState(false)
   const cartContext = useContext(CartContext)
 
-  console.log(cartContext.cartComponents)
-
   const isInCart = cartContext.cartComponents.find(element => element.item.id === item.id)
 
 
