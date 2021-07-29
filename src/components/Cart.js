@@ -35,10 +35,11 @@ export default function Cart (){
           </Col>
         </Row>
       )}
-      <div style={{backgroundColor:'black', padding: '10px', margin:'10px'}} >
-      <p style={{textAlign:'right', textTransform: 'uppercase', fontSize: '20px', color:'white',marginRight:'10px', marginBottom:'0'}}>
+      <div style={{border: '1px solid #000', padding: '10px', margin:'10px'}} >
+      <p style={{textAlign:'right', textTransform: 'uppercase', fontSize: '20px',marginRight:'10px', marginBottom:'0'}}>
       total : $ {cartContext.totalPrice}</p>
       </div>
+      <Link to={'/checkout'}><Button style={{float: 'right', marginRight:'10px'}}> Finalizar la compra </Button></Link>
       </>
       :
       <>Tu carrrito está vacio <br/>

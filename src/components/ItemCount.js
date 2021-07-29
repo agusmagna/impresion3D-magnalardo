@@ -36,7 +36,7 @@ function ItemCount ({stock, onAdd, initial, isHidden, item}) {
            {count}
            <Button onClick={addCount} style={{marginLeft:'7px'}}>+</Button><br/>
         </div>
-         <span>{error}</span>
+           <span>{error}</span>
          <Button type='primary' onClick={(event)=> {
            if (onAdd) return onAdd({count, item})}} style={{marginTop:'10px'}}> Agregar al carrito</Button>
        </Card>

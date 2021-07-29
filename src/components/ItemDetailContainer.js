@@ -24,11 +24,6 @@ console.log(productId.itemid)
           console.log('error',error)
         })
     }
-  // const getItem = () => {
-  //
-  //   getItems.then(res => res.clone().json()).then((data) => setProduct(data.find(element => element.id === productId.itemid)))
-  // }
-
 
     useEffect(()=>{
       getItem();
