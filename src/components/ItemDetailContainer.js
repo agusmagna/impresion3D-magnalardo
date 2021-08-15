@@ -10,7 +10,7 @@ function ItemDetailContainer () {
   const [product, setProduct] = useState([])
   const productId = useParams();
 
-console.log(productId.itemid)
+
   const getItem = () => {
         const db = getFirestore();
         const productsCollection = db.collection('productos');
@@ -29,7 +29,6 @@ console.log(productId.itemid)
       getItem();
         },[])
 
-  console.log('producto', product)
 
  return (
    <ItemDetail item = {product}/>

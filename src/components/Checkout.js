@@ -1,18 +1,22 @@
 import React, {useContext, useState, useEffect} from 'react'
 // Estilo
-import {Card, Row, Col, Button, Form, Input, Checkbox, Alert} from 'antd'
+import {Card, Row, Col, Button, Form, Alert} from 'antd'
 // Contexto
 import {CartContext} from './CartContext.js'
 // React-router-dom
 import { Link } from 'react-router-dom';
 // firebase
-import {getFirebase, getFirestore} from '../firebase'
+import {getFirestore} from '../firebase'
+// components
+import BuySuccessfully from './BuySuccessfully.js'
+import ItemsToShop from './ItemsToShop.js'
 
 
 export default function Checkout() {
   const cartContext = useContext(CartContext)
   const [error,setError] = useState('')
   const [orderId, setOrderId] = useState('')
+  const [stockControl, setStockControl] = useState(true)
   const [disabled, setDisabled] = useState(true)
   const [userInfo, setUserInfo] = useState({
     name:'',
@@ -21,23 +25,26 @@ export default function Checkout() {
     mail:'',
     verifyMail:'',
   })
-  const firebase = getFirebase()
   const inputs = [
     {
       name: 'name',
-      label: 'Nombre'
+      label: 'Nombre',
+      type: 'text'
     },
     {
       name: 'lastname',
-      label: 'Apellido'
+      label: 'Apellido',
+      type: 'text'
     },
     {
       name: 'phone',
-      label: 'Telefono / Celular'
+      label: 'Telefono / Celular',
+      type: 'number'
     },
     {
       name: 'mail',
-      label: 'Mail'
+      label: 'Mail',
+      type: 'email'
     },
     {
       name: 'verifyMail',
@@ -65,10 +72,19 @@ export default function Checkout() {
     buyer: userInfo,
     items: cartContext.cartComponents,
     total: cartContext.totalPrice,
+    date: new Date,
+  }
+
+  const verifyStock = () => {
+    cartContext.cartComponents.map((component)=>
+      setStockControl(db.collection('productos').where('id','==', component.item.id) === component.quantity)
+    )
+
   }
 
   const onSubmit = (evt) =>{
-    if(error===''){
+    verifyStock()
+    if(error==='' && stockControl){
       orders.add(newOrder).then(({id}) => {
         setOrderId(id)
         cartContext.setCartComponents([])
@@ -92,7 +108,6 @@ export default function Checkout() {
     }
   },[userInfo])
 
-  console.log('error',error)
   return(
       <>
       {cartContext.cartComponents.length ?
@@ -111,7 +126,7 @@ export default function Checkout() {
                onFinish={onFinish}
                onFinishFailed={onFinishFailed}
                >
-                {inputs.map(({name,label})=>
+                {inputs.map(({name,label,type})=>
                   <>
                   <Form.Item
                 label={label}
@@ -119,9 +134,11 @@ export default function Checkout() {
                 rules={[{ required: true, message: 'Por favor completar este campo' }]}
                   >
                   <input
+                    style={{border:'0.5px solid #777'}}
                     name={name}
                     onChange={onChange}
-                    value={userInfo[name]}/>
+                    value={userInfo[name]}
+                    type= {type}/>
                 </Form.Item>
                   </>
                 )}
@@ -147,29 +164,7 @@ export default function Checkout() {
             </Card>
           </Col>
           <Col style={{ width:'40%'}}>
-            <Card
-              style={{ width: '90%', float: 'left', marginTop:'40px', textAlign:'left'}}
-              type="inner"
-              title="Detalle de productos">
-              <>
-              {cartContext.cartComponents.map((component)=>
-                <Row>
-                  <Col style={{ width:'30%'}}>
-                    <img src={component.item.image} alt='foto de producto'style={{ width:'100%', margin:'auto', display:'block'}}/>
-                  </Col>
-                  <Col style={{ padding: '10px', width:'70%'}}>
-                    <h2>{component.item.name}</h2>
-                    <p>$ {component.item.price}</p>
-                    <p>Cantidad: {component.quantity}</p>
-                  </Col>
-                </Row>
-              )}
-              <div style={{border: '1px solid #000', padding: '10px', margin:'10px'}} >
-              <p style={{textAlign:'right', textTransform: 'uppercase', fontSize: '20px',marginRight:'10px', marginBottom:'0'}}>
-              total : $ {cartContext.totalPrice}</p>
-              </div>
-              </>
-            </Card>
+            <ItemsToShop items={cartContext.cartComponents} totalPrice={cartContext.totalPrice}/>
           </Col>
         </Row>
         </>
@@ -177,7 +172,7 @@ export default function Checkout() {
         <>
         {orderId.length ?
           <>
-        <p style={{ width:'80%', margin: '10px auto'}}> Su orden se genero con éxito. Por favor guarde el número de orden:{orderId}</p>
+        <BuySuccessfully orderId = {orderId}/>
         </>
         :
         <>Tu carrrito está vacio <br/>

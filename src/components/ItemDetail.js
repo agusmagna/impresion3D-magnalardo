@@ -14,7 +14,9 @@ import {CartContext} from './CartContext.js'
 
 function ItemDetail({item}){
   const [isHidden, setIsHidden] = useState(false)
+  const [error, setError] = useState(true)
   const cartContext = useContext(CartContext)
+
 
   const isInCart = cartContext.cartComponents.find(element => element.item.id === item.id)
 
@@ -33,7 +35,7 @@ function ItemDetail({item}){
       }
       setIsHidden(true);
     } else (
-      alert('No puedes agregar dos veces el mismo producto')
+      setError(false)
     )
   };
 
@@ -57,7 +59,9 @@ function ItemDetail({item}){
             <Alert message='Tu producto se agregó correctamente' type="success"/><br/>
             <Link to={'/cart'}> <Button type='primary'>Terminar mi compra</Button></Link>
           </div>
-
+          <div hidden={error}>
+            <Alert message='No puedes agregar el mismo producto dos veces' type="error"/><br/>
+          </div>
         </Col>
 
       </Row>

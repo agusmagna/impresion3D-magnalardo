@@ -14,7 +14,6 @@ function ItemListContainer(){
   const categoryId = useParams()
   const [loading, setLoading] = useState(false)
 
-  console.log(categoryId.categoryid)
   const getProducts = () => {
     if (categoryId.categoryid) {
       setLoading(true)
@@ -53,7 +52,6 @@ function ItemListContainer(){
     getProducts()
   },[categoryId])
 
-  console.log(productsData)
 
 
   if(loading){
